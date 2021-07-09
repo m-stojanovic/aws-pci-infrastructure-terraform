@@ -1,0 +1,15 @@
+version: "3"
+services:
+  rabbit:
+    image: rabbitmq:3-management
+    container_name: "{{ var_name }}-rabbitmq-server"
+    hostname: "{{ var_name }}-rabbitmq"
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: rabbitmq
+      RABBITMQ_DEFAULT_PASS: test123!
+    volumes:
+      - /devops/docker-compose/rabbitmq/data-rabbitmq:/var/lib/rabbitmq
+    restart: unless-stopped

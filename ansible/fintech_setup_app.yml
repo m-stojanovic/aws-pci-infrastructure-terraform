@@ -1,0 +1,17 @@
+- name: Setup Fintech Server Environment
+  hosts: app
+  become: yes
+  become_method: sudo
+  become_user: root
+  remote_user: ec2-user
+  gather_facts: yes
+  vars:
+    dev_environment: fintech
+    var_name: stage
+  roles:
+    - common
+    - fintech-server
+    - octopus-octopush
+    - ums-server
+    - octopus-server
+    - docker_containers

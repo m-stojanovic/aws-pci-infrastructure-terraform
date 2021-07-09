@@ -1,0 +1,28 @@
+host web1
+  HostName 172.21.0.29
+  Port 22
+  User ec2-user
+  TCPKeepAlive yes
+  ServerAliveInterval 60
+  IdentityFile ~/.ssh/{{ var_name}}_{{ var_dev_environment }}.pem
+host web2
+  HostName 172.21.0.39
+  Port 22
+  User ec2-user
+  TCPKeepAlive yes
+  ServerAliveInterval 60
+  IdentityFile ~/.ssh/{{ var_name}}_{{ var_dev_environment }}.pem
+host app1
+  HostName 172.21.0.52
+  Port 22
+  User ec2-user
+  TCPKeepAlive yes
+  ServerAliveInterval 60
+  IdentityFile ~/.ssh/{{ var_name}}_{{ var_dev_environment }}.pem
+host app2
+  HostName 172.21.0.69
+  Port 22
+  User ec2-user
+  TCPKeepAlive yes
+  ServerAliveInterval 60
+  IdentityFile ~/.ssh/{{ var_name}}_{{ var_dev_environment }}.pem

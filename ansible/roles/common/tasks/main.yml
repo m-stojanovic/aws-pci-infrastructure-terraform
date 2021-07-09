@@ -1,0 +1,77 @@
+---
+- name: Set timestamp in bash history
+  become: yes
+  become_user: "root"
+  become_method: sudo
+  shell: echo 'HISTTIMEFORMAT="%d/%m/%y %T "' >> /etc/bashrc
+
+- name: Import EPEL GPG key.
+  rpm_key:
+    key: "https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7"
+    state: present
+  when: ansible_facts['distribution'] == 'Amazon'
+
+- name: Prepare repository to download required packages
+  yum:
+    name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+    state: present
+  when: ansible_facts['distribution'] == 'Amazon'
+
+- name: Amazon system update
+  yum:
+    name: "*"
+    state: latest
+    skip_broken: yes
+    update_cache: yes
+
+- name: Checking for prerequirements
+  yum:
+    name:
+      - libselinux-python
+      - java-1.8.0-openjdk
+      - python-pip
+      - unzip
+      - htop
+      - telnet
+      - vim
+      - tree
+      - mlocate
+    state: latest
+    skip_broken: yes
+    lock_timeout: 15
+
+- name: Install libraries for download
+  pip:
+    name: lxml
+    state: present
+
+- name: Create directory structure
+  file:
+    path: "{{ item }}"
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: 0755
+    state: directory
+  with_items:
+    - /devops/shelf
+    - /devops/backup/deployment
+  when: '"fintech" in var_name'
+
+- name: Ensure group "fintech" exists
+  group:
+    name: fintech
+    state: present
+    gid: 1750
+  when: '"fintech" in var_name'
+
+- name: Add user "fintech"
+  user:
+    name: fintech
+    groups: fintech
+    shell: /sbin/nologin
+    append: yes
+    comment: "fintech nologin User"
+    create_home: no
+    state: present
+  become: true
+  when: '"fintech" in var_name'

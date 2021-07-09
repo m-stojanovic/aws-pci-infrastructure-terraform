@@ -1,0 +1,18 @@
+- name: Setup Fintech Server Environment
+  hosts: test
+  become: yes
+  become_method: sudo
+  become_user: root
+  remote_user: ec2-user
+  gather_facts: yes
+  vars:
+    # dev_environment: "{{ lookup('env','TF_VAR_var_dev_environment') }}"
+    # var_name: "{{ lookup('env','TF_VAR_var_name') }}"
+    # octopus_server: "{{ lookup('env','TF_VAR_var_analytics') }}"
+    # ums: "{{ lookup('env','TF_VAR_var_ums') }}"
+    dev_environment: fintech
+    var_name: stage
+  roles:
+    - common
+    - webapp
+    - nginx

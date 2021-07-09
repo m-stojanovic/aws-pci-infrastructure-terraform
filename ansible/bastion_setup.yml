@@ -1,0 +1,15 @@
+# Manually edit vars
+- name: Setup Bastion Server Environment
+  hosts: all
+  become: yes
+  become_method: sudo
+  become_user: root
+  remote_user: ec2-user
+  gather_facts: yes
+  vars:
+    dev_environment: bastion
+    peering_environment: stage
+    var_name: client_name
+  roles:
+    - common
+    - ssh_setup
