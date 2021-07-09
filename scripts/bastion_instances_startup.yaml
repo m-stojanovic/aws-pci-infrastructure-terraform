@@ -1,0 +1,34 @@
+#cloud-config
+users:
+  - default
+  - name : ${username_1}
+    gecos: User 1
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    shell: /bin/bash
+    groups: users, admin
+    lock_passwd: true
+    ssh_authorized_keys:
+      - ${username_1_pub_ssh}
+  - name : ${username_2}
+    gecos: User 2
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    shell: /bin/bash
+    groups: users, admin
+    lock_passwd: true
+    ssh_authorized_keys:
+      - ${username_2_pub_ssh}
+  - name : ${username_3}
+    gecos: User 3
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    shell: /bin/bash
+    groups: users, admin
+    lock_passwd: true
+    ssh_authorized_keys:
+      - ${username_3_pub_ssh}
+package_update: true
+
+runcmd:
+  - sed -i "s/#Port 22/Port ${ssh_port}/g" /etc/ssh/sshd_config
+  - sed -i "s/Subsystem.*/Subsystem sftp internal-sftp/g" /etc/ssh/sshd_config
+  - systemctl restart sshd
+  - sudo hostnamectl set-hostname bastion-host
