@@ -2,8 +2,8 @@ version: "3"
 services:
   rabbit:
     image: rabbitmq:3-management
-    container_name: "{{ var_name }}-rabbitmq-server"
-    hostname: "{{ var_name }}-rabbitmq"
+    container_name: "{{ var_dev_environment }}-rabbitmq-server"
+    hostname: "{{ var_dev_environment }}-rabbitmq"
     ports:
       - "5672:5672"
       - "15672:15672"
@@ -13,3 +13,4 @@ services:
     volumes:
       - /devops/docker-compose/rabbitmq/data-rabbitmq:/var/lib/rabbitmq
     restart: unless-stopped
+    # Disable the rabbitmq-management plugin
