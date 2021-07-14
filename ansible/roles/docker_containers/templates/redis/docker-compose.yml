@@ -1,19 +1,25 @@
 version: "3"
 services:
   redis:
-    image: redis
-    command: ["redis-server", "--appendonly", "yes"]
-    container_name: "{{ var_name }}-redis-server"
-    hostname: "{{ var_name }}-redis"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: "{{ var_dev_environment }}-redis-server-1"
+    hostname: "{{ var_dev_environment }}-redis-1"
     ports:
       - "6379:6379"
     environment:
       REDIS_REPLICATION_MODE: master
     volumes:
-      - /devops/docker-compose/redis/data-redis:/data
-    networks:
-      - "redis-net-{{ var_name }}"
+      - /carnegie/docker-compose/redis/data-redis:/data
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
+    sysctls:
+       - net.core.somaxconn=512
     restart: unless-stopped
-
 networks:
-  redis-net-{{ var_name }}:
+  default:
+    external:
+      name: rabbitmq_default
